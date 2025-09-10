@@ -1,17 +1,18 @@
 "use client";
 
-
 import {useState} from "react";
+
 
 export default function Home() {
   const [name,setName] = useState("Diego");
-  const [foodPack, setPack] = useState([{name:"Fish",category:'Salad',ingredients:["Salt","Lettuce","Etc."]},{name:"Fish",category:'Spicy',ingredients:["Salt","Lettuce","Etc."]},
+  const [Findex,setFindex] = useState(0);
+  const [foodPack, setPack] = useState([{name:"Fishes",category:'Salad',ingredients:["Salt","Lettuce","Etc."]},{name:"Fish",category:'Spicy',ingredients:["Salt","Lettuce","Etc."]},
                                         {name:"Fish",category:'Fast food',ingredients:["Salt","Lettuce","Etc."]},{name:"Fish",category:'Soup',ingredients:["Salt","Lettuce","Etc."]}]);
   return (
     <div>
       <header className="h-14 w-full border border-black border-solid">
         <nav className="flex justify-between items-center h-full">
-          <a href="/" className="font-bold">
+          <a href="/" className="font-bold text-2xl ml-3">
             Recomendations
           </a>
           <div className="flex justify-around items-center w-[600px] h-full">
@@ -28,19 +29,23 @@ export default function Home() {
         </nav>
       </header>
       <main className="flex flex-col items-center">
-        <h1 className="self-start">Hello {name}. Are any of these of interest to you?</h1>
+        <h1 className="self-start mx-5 my-7 text-xl">Hello {name}. Are any of these of interest to you?</h1>
         <article className="bg-amber-100 border border-black border-solid w-[90%] h-[37vh] p-5 rounded-md flex gap-10">
           {foodPack.map((value,index)=>(
-            <div key={index} className="basis-full flex flex-col justify-center">
-              <figure className="border border-black border-solid w-full h-[70%] flex items-end">
-                <h3 className="m-2 font-bold">{value.name}</h3>
+            <div key={index} className="basis-full flex flex-col justify-center" onClick={()=>{setFindex(index)}}>
+              <figure className="relative border border-black border-solid w-full h-[70%] flex items-end">
+                <img className="absolute w-full h-full object-cover" src="./template.jpeg" alt="" />
+                <div className="w-full z-50 bg-linear-to-b from-[rgba(0,0,0,0)] to-[rgba(0,0,0,6)]">
+                  <h3 className="m-2 font-bold  text-white">{value.name}</h3>
+                </div>
+                
               </figure>
               <p className="ml-1">{value.category}</p>
             </div>
             ))}
         </article>
         <article>
-            
+            <h1>{Findex}</h1>
         </article>
       </main>
       
