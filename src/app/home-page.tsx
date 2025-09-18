@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as voidStar } from "@fortawesome/free-regular-svg-icons";
@@ -8,7 +7,6 @@ import { useState } from "react";
 
 
 export default function Home() {
-  const router = useRouter();
   const [name, setName] = useState("Diego");
   const [Findex, setFindex] = useState(0);
   const [temp_rating, setTempRt] = useState([0,-1]);//[old position, current position]
@@ -32,11 +30,9 @@ export default function Home() {
     <div>
       <header className="h-14 w-full border border-black border-solid">
         <nav className="flex justify-between items-center h-full">
-          <a href="/" className="font-bold text-2xl ml-3">
-            Recomendations
-          </a>
+          <a href="/" className="font-bold text-2xl ml-3">Recomendations</a>
           <div className="flex justify-around items-center w-[600px] h-full">
-            <a href="/" className="font-bold basis-full text-center">History</a>
+            <a href="/history" className="font-bold basis-full text-center">History</a>
             <a href="/" className="font-bold basis-full text-center">All foods</a>
             <a href="/" className="font-bold basis-full text-center">Run</a>
             <div className="font-bold basis-full text-center h-full flex justify-center items-center">
@@ -52,12 +48,11 @@ export default function Home() {
         <article className="bg-amber-100 border border-black border-solid w-[90%] h-[37vh] p-5 rounded-md flex gap-10">
           {foodPack.map((value, index) => (
             <div key={index} className="basis-full flex flex-col justify-center" onClick={() => { setFindex(index) }}>
-              <figure className="relative border border-black border-solid w-full h-[70%] flex items-end">
-                <img className="absolute w-full h-full object-cover" src="./template.jpeg" alt="" />
+              <figure className="relative border border-black border-solid w-full h-[70%] flex items-end rounded-md overflow-hidden">
+                <img className="absolute w-full h-full object-cover " src="./template.jpeg" alt="" />
                 <div className="w-full z-50 bg-linear-to-b from-[rgba(0,0,0,0)] to-[rgba(0,0,0,6)]">
                   <h3 className="m-2 font-bold  text-white">{value.name}</h3>
                 </div>
-
               </figure>
               <p className="ml-1">{value.category}</p>
             </div>
@@ -67,11 +62,10 @@ export default function Home() {
           <section className="basis-full flex flex-col">
             <div className="w-[90%] self-center">
               <h2 className="text-2xl font-bold">{foodPack[Findex].name}</h2>
-              <figure className="border border-black border-solid w-full flex items-end grow">
+              <figure className="mt-1 border border-black border-solid w-full flex items-end grow">
                 <img className="w-full h-full object-cover" src="./template.jpeg" alt="" />
               </figure>
             </div>
-
           </section>
           <section className="basis-full flex flex-col justify-around">
             <div>
@@ -89,7 +83,7 @@ export default function Home() {
               <div className="flex justify-center">
                 {starsController(temp_rating[1])}
               </div>
-              <button className="mt-10 p-1 border-2 border-black border-solid rounded-xl bg-green-300 font-bold" onClick={()=>{router.push('/history')}}>sent rating!</button>
+              <button className="mt-10 p-1 border-2 border-solid rounded-xl border-black bg-green-700 text-white font-bold">sent rating!</button>
             </div>
           </section>
           <section className="basis-full flex flex-col ">
