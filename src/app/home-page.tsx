@@ -92,7 +92,7 @@ export default function Home() {
               <div className="flex justify-center">
                 {starsController(temp_rating[1])}
               </div>
-              <button className="mt-10 p-1 border-2 border-solid rounded-xl border-black bg-green-700 text-white font-bold">sent rating!</button>
+              <button className="mt-10 p-1 border-2 border-solid rounded-xl border-black bg-green-700 text-white font-bold">send rating!</button>
             </div>
           </section>
           <section className="basis-full flex flex-col ">

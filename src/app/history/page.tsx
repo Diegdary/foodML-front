@@ -7,7 +7,7 @@ import { useState } from "react";
 
 export default function History() {//get info
   const [name, setName] = useState("Diego");
-  const [ratingsPack,setRatingsPack] = useState([{name:"Steak",rating:2.5,date:"15/07/2025",imgURL:"https:"},{name:"Rice and eggs",rating:5,date:"11/07/2024",imgURL:"https:"},{name:"Rice and eggs",rating:5,date:"11/07/2024",imgURL:"https:"},{name:"Rice and eggs",rating:5,date:"11/07/2024",imgURL:"https:"},{name:"Rice and eggs",rating:5,date:"11/07/2024",imgURL:"https:"}]);
+  const [ratingsPack,setRatingsPack] = useState([{name:"Steak",rating:2.5,date:"15/07/2025",imgURL:"https:"},{name:"Rice and eggs",rating:5,date:"11/07/2024",imgURL:"https:"},{name:"Rice and eggs",rating:5,date:"15/04/2020",imgURL:"https:"},{name:"Rice and eggs",rating:5,date:"11/07/2024",imgURL:"https:"},{name:"Bandeja Paisa",rating:3,date:"11/07/2024",imgURL:"https:"}]);
 
   const [foodPacks, setPacks] = useState([{pack:
     [{ name: "Fishes", category: 'Salad', ingredients: ["Salt", "Lettuce", "Etc."] },
@@ -52,7 +52,7 @@ export default function History() {//get info
               <a href="/" className="font-bold basis-full text-center">Run</a>
               <div className="font-bold basis-full text-center h-full flex justify-center items-center">
                 <div className="bg-amber-100 border-2 border-black border-solid rounded-full h-10 w-10 flex justify-center items-center">
-                    <a href="/" >{name[0]}</a>
+                    <a href="/profile" >{name[0]}</a>
                 </div>
               </div>
             </div>
