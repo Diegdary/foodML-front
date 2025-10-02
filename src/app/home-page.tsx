@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const router = useRouter()
-  const { user,fetchWithAuth } = useAuth();
+  const { fetchWithAuth } = useAuth();
   const [name, setName] = useState("?");
   const [Findex, setFindex] = useState(0);
   const [temp_rating, setTempRt] = useState([0,-1]);//[old position, current position]
@@ -26,9 +26,8 @@ export default function Home() {
   useEffect(()=>{
     const load = async ()=>{
       try{
-        await fetchWithAuth("http://localhost:8000/api/auth/me/");
-        setName(user.username)
-        console.log(user)
+        const res = await fetchWithAuth("http://localhost:8000/api/auth/me/");
+        setName(res.username)
       }
       catch(error){
         alert(error);
@@ -64,7 +63,7 @@ export default function Home() {
             <a href="/" className="font-bold basis-full text-center">Run</a>
             <div className="font-bold basis-full text-center h-full flex justify-center items-center">
               <div className="bg-amber-100 border-2 border-black border-solid rounded-full h-10 w-10 flex justify-center items-center">
-                <a href="/" >{name[0].toUpperCase()}</a>
+                <a href="/profile" >{name[0].toUpperCase()}</a>
               </div>
             </div>
           </div>

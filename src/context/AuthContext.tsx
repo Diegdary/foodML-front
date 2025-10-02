@@ -14,16 +14,17 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<any | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(() => {
+  if (typeof window === "undefined") return null;
+    return localStorage.getItem("access");
+  });
 
   // Restore token on reload
   useEffect(() => {
-    const token = localStorage.getItem("access");
-    if (token) {
-      setAccessToken(token);
-      fetchUser(token);
-    }
-  }, []);
+  if (accessToken) {
+    fetchUser(accessToken); // fetch profile after render
+  }
+}, [accessToken]);
 
   const fetchUser = useCallback(async (token: string) => {
     const res = await fetch("http://localhost:8000/api/auth/me/", {
