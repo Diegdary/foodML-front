@@ -3,11 +3,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as voidStar } from "@fortawesome/free-regular-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from 'next/navigation';
 
+ 
 
 export default function Home() {
-  const [name, setName] = useState("Diego Jose");
+  const router = useRouter()
+  const { user,fetchWithAuth } = useAuth();
+  const [name, setName] = useState("?");
   const [Findex, setFindex] = useState(0);
   const [temp_rating, setTempRt] = useState([0,-1]);//[old position, current position]
   const [foodPack, setPack] = useState([
@@ -17,6 +22,21 @@ export default function Home() {
     { name: "Fish", category: 'Fast food', ingredients: ["Salt", "Lots of lettuce", "Etc."] },
     { name: "Lemon Soup", category: 'Soup', ingredients: ["Salt", "Watta", "Lemon"] },
   { name: "Lemon Soup", category: 'Soup', ingredients: ["Salt", "Watta", "Lemon"] }]);
+
+  useEffect(()=>{
+    const load = async ()=>{
+      try{
+        await fetchWithAuth("http://localhost:8000/api/auth/me/");
+        setName(user.username)
+        console.log(user)
+      }
+      catch(error){
+        alert(error);
+        router.push('/login');
+      }
+    }
+    load();
+  },[])
 
   const starsController = (position:number)=>{
     const follow_up = [0,0,0,0,0].map((_element,index)=>index<=position?1:0);
@@ -30,11 +50,9 @@ export default function Home() {
     setTempRt([position,position]);
   }
 
-  const getFirstName = (fullName:string)=>{
-    return fullName.split(' ')[0];
-  }
+  const getFirstName = (fullName:string) => fullName.split(' ')[0];
   
-
+  
   return (
     <div>
       <header className="h-14 w-full border border-black border-solid">
@@ -46,7 +64,7 @@ export default function Home() {
             <a href="/" className="font-bold basis-full text-center">Run</a>
             <div className="font-bold basis-full text-center h-full flex justify-center items-center">
               <div className="bg-amber-100 border-2 border-black border-solid rounded-full h-10 w-10 flex justify-center items-center">
-                <a href="/" >{name[0]}</a>
+                <a href="/" >{name[0].toUpperCase()}</a>
               </div>
             </div>
           </div>

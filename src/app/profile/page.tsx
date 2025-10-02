@@ -9,7 +9,7 @@ export default function MePage() {
 
   useEffect(() => {
     const load = async () => {
-      const res = await fetchWithAuth("http://localhost:8000/api/users/me/");
+      const res = await fetchWithAuth("http://localhost:8000/api/auth/me/");
       setData(res);
     };
     load();

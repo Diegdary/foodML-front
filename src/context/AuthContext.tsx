@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useMemo} from "react";
 
 interface AuthContextType {
   user: any | null;
@@ -16,17 +16,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<any | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
+  // Restore token on reload
   useEffect(() => {
-    // Restore token on reload
     const token = localStorage.getItem("access");
     if (token) {
       setAccessToken(token);
-      // Optionally fetch user
       fetchUser(token);
     }
   }, []);
 
-  const fetchUser = async (token: string) => {
+  const fetchUser = useCallback(async (token: string) => {
     const res = await fetch("http://localhost:8000/api/auth/me/", {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -36,13 +35,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } else {
       setUser(null);
     }
-  };
+  }, []);
 
-  const login = async (username: string, password: string) => {
+  const login = useCallback(async (email: string, password: string) => {
     const res = await fetch("http://localhost:8000/api/auth/token/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ email, password }),
     });
 
     if (!res.ok) throw new Error("Invalid credentials");
@@ -52,32 +51,37 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("refresh", data.refresh);
     setAccessToken(data.access);
     await fetchUser(data.access);
-  };
+  }, [fetchUser]);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
     setAccessToken(null);
     setUser(null);
-  };
+  }, []);
 
-  const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
-    if (!accessToken) throw new Error("Not authenticated");
-    const res = await fetch(url, {
-      ...options,
-      headers: {
-        ...options.headers,
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return res.json();
-  };
-
-  return (
-    <AuthContext.Provider value={{ user, accessToken, login, logout, fetchWithAuth }}>
-      {children}
-    </AuthContext.Provider>
+  const fetchWithAuth = useCallback(
+    async (url: string, options: RequestInit = {}) => {
+      if (!accessToken) throw new Error("Not authenticated");
+      const res = await fetch(url, {
+        ...options,
+        headers: {
+          ...options.headers,
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return res.json();
+    },
+    [accessToken]
   );
+
+  // Preventing re-renders of consumers unless one of these changes
+  const value = useMemo(
+    () => ({ user, accessToken, login, logout, fetchWithAuth }),
+    [user, accessToken, login, logout, fetchWithAuth]
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
