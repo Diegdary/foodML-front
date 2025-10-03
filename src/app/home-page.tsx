@@ -27,6 +27,7 @@ export default function Home() {
     const load = async ()=>{
       try{
         const res = await fetchWithAuth("http://localhost:8000/api/auth/me/");
+        console.log(res)
         setName(res.username)
       }
       catch(error){

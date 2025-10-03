@@ -1,10 +1,12 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, useCallback, useMemo} from "react";
+import { useRouter } from "next/navigation";
 
 interface AuthContextType {
   user: any | null;
   accessToken: string | null;
+  register: (username: string,email: string, password: string) => Promise<any>;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
   fetchWithAuth: (url: string, options?: RequestInit) => Promise<any>;
@@ -13,6 +15,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter()
   const [user, setUser] = useState<any | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(() => {
   if (typeof window === "undefined") return null;
@@ -36,6 +39,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } else {
       setUser(null);
     }
+  }, []);
+
+  const register = useCallback(async (username: string, email: string, password: string) => {
+    const res = await fetch("http://localhost:8000/api/auth/register/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({username, email, password }),
+    });
+    const errorBody = await res.json();
+    return errorBody;
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
@@ -63,23 +76,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchWithAuth = useCallback(
     async (url: string, options: RequestInit = {}) => {
-      if (!accessToken) throw new Error("Not authenticated");
-      const res = await fetch(url, {
-        ...options,
-        headers: {
-          ...options.headers,
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      return res.json();
+      try {
+        const token= localStorage.getItem("access");
+        const res = await fetch(url, {
+          ...options,
+          headers: {
+            ...options.headers,
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!res.ok) throw new Error(res.statusText);
+        return res.json();
+      }
+      catch(error){
+        alert(error)// might swap to console.log
+        router.replace('/login')
+      }
+      
     },
-    [accessToken]
+    []
   );
 
   // Preventing re-renders of consumers unless one of these changes
   const value = useMemo(
-    () => ({ user, accessToken, login, logout, fetchWithAuth }),
-    [user, accessToken, login, logout, fetchWithAuth]
+    () => ({ user, accessToken, register, login, logout, fetchWithAuth }),
+    [user, accessToken, register, login, logout, fetchWithAuth]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
