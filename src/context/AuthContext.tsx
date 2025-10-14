@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 }, [accessToken]);
 
   const fetchUser = useCallback(async (token: string) => {
-    const res = await fetch("http://localhost:8000/api/auth/me/", {
+    const res = await fetch("http://localhost:8000/api/auth/me", {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (res.ok) {
@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const register = useCallback(async (username: string, email: string, password: string) => {
-    const res = await fetch("http://localhost:8000/api/auth/register/", {
+    const res = await fetch("http://localhost:8000/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({username, email, password }),
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
-    const res = await fetch("http://localhost:8000/api/auth/token/", {
+    const res = await fetch("http://localhost:8000/api/auth/token", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),

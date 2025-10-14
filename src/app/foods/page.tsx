@@ -1,30 +1,27 @@
 "use client";
 
+import { useState, useEffect} from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function MePage() {
-  const router = useRouter();
-  const { user, fetchWithAuth, logout } = useAuth();
-  const [data, setData] = useState<any>(null);
+export default function Foods(){
+    const { fetchWithAuth, accessToken } = useAuth();
+    const router = useRouter();
+    const [name, setName] = useState("?");
+    const [data, setData] = useState<any>(null)
 
-  useEffect(() => {
-    const load = async () => {
-      const res = await fetchWithAuth("http://localhost:8000/api/auth/profile");
-      setData(res);
-    };
-    load();
-  }, [fetchWithAuth]);
+    useEffect(()=>{
+        const load = async ()=>{
+            if(!accessToken){router.replace('/login')}
+            const res = await fetchWithAuth('http://localhost:8000/api/foods/ratings');
+            setData(res);
+        }
+        load();
+    },[])
 
-  const signOut = ()=>{
-    logout();
-    router.replace('/login');
-  }
-
-  return (
+    return (
     <div>
-      <header className="h-14 w-full border border-black border-solid">
+        <header className="h-14 w-full border border-black border-solid">
         <nav className="flex justify-between items-center h-full">
           <a href="/" className="font-bold text-2xl ml-3">Recomendations</a>
           <div className="flex justify-around items-center w-[600px] h-full">
@@ -33,15 +30,18 @@ export default function MePage() {
             <a href="/run" className="font-bold basis-full text-center">Run</a>
             <div className="font-bold basis-full text-center h-full flex justify-center items-center">
               <div className="bg-amber-100 border-2 border-black border-solid rounded-full h-10 w-10 flex justify-center items-center">
-                <a href="/profile" >{user?.username[0].toUpperCase()}</a>
+                <a href="/profile" >{name[0].toUpperCase()}</a>
               </div>
             </div>
           </div>
         </nav>
       </header>
-      <h1>Welcome {user?.username}</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-      <button className="bg-red-500 text-white border border-black border-solid rounded-xs" onClick={signOut}>Sign out</button>
+      <main>
+        <pre>
+            {JSON.stringify(data,null,2)}
+        </pre>
+      </main>
+
     </div>
-  );
+    );
 }

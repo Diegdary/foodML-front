@@ -33,10 +33,10 @@ export default function History() {//get info
   ]);
 
     const starsController = (position:number)=>{
-    const follow_up = [0,0,0,0,0].map((_element,index)=>index<=position?1:0);
-    return follow_up.map((element,index)=>
-    <FontAwesomeIcon key={index} icon={faStar} className={element==1?'text-yellow-500':'text-white'} size='1x'/>
-    );
+      const follow_up = [0,0,0,0,0].map((_element,index)=>index<=position?1:0);
+      return follow_up.map((element,index)=>
+        <FontAwesomeIcon key={index} icon={faStar} className={element==1?'text-yellow-500':'text-white'} size='1x'/>
+      );
   }
 
 
@@ -48,8 +48,8 @@ export default function History() {//get info
             <a href="/" className="font-bold text-2xl ml-3">Recomendations</a>
             <div className="flex justify-around items-center w-[600px] h-full">
               <a href="/history" className="font-bold basis-full text-center">History</a>
-              <a href="/" className="font-bold basis-full text-center">All foods</a>
-              <a href="/" className="font-bold basis-full text-center">Run</a>
+              <a href="/foods" className="font-bold basis-full text-center">All foods</a>
+            <a href="/run" className="font-bold basis-full text-center">Run</a>
               <div className="font-bold basis-full text-center h-full flex justify-center items-center">
                 <div className="bg-amber-100 border-2 border-black border-solid rounded-full h-10 w-10 flex justify-center items-center">
                     <a href="/profile" >{name[0]}</a>
