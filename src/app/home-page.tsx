@@ -16,13 +16,14 @@ export default function Home() {
   const [Findex, setFindex] = useState(0);
   const [temp_rating, setTempRt] = useState([0,-1]);//[old position, current position]
   const [foodPack, setPack] = useState([
-    { name: "Fishes", category: 'Salad', ingredients: ["Salt", "Lettuce", "Etc."] },
-    { name: "Taco", category: 'Spicy', ingredients: ["Taco", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat"
-    , "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat"] },
-    { name: "Fish", category: 'Fast food', ingredients: ["Salt", "Lots of lettuce", "Etc."] },
-    { name: "Lemon Soup", category: 'Soup', ingredients: ["Salt", "Watta", "Lemon"] }]);
+    {id:1, title: "Fishes", category: 'Salad', ingredients: ["Salt", "Lettuce", "Etc."], predicted_rating:2, image:"https://res.cloudinary.com/dqlrqzo1a/image/upload/v1760283792/Pizza_frgss0.jpg" },
+    {id:2, title: "Taco", category: 'Spicy', ingredients: ["Taco", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat"
+    , "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat"], predicted_rating:2, image:"https://res.cloudinary.com/dqlrqzo1a/image/upload/v1760283792/Pizza_frgss0.jpg" },
+    {id:3, title: "Fish", category: 'Fast food', ingredients: ["Salt", "Lots of lettuce", "Etc."], predicted_rating:2, image:"https://res.cloudinary.com/dqlrqzo1a/image/upload/v1760283792/Pizza_frgss0.jpg" },
+    {id:4, title: "Lemon Soup", category: 'Soup', ingredients: ["Salt", "Watta", "Lemon"], predicted_rating:2, image:"https://res.cloudinary.com/dqlrqzo1a/image/upload/v1760283792/Pizza_frgss0.jpg" }]);
 
   useEffect(()=>{
+    
     const load = async ()=>{
       try{
         if(!accessToken){
@@ -30,8 +31,10 @@ export default function Home() {
           return;
         }
         const res = await fetchWithAuth("http://localhost:8000/api/auth/me");
-        console.log(res)
-        setName(res.username)
+        setName(res.username);
+        const temp_pack = await fetchWithAuth("http://localhost:8000/api/recommendations/last/");
+        console.log(temp_pack)
+        setPack(temp_pack.recommendations)
       }
       catch(error){
         
@@ -40,6 +43,13 @@ export default function Home() {
     }
     load();
   },[])
+
+  const staticStarsCont = (position:number)=>{
+    const follow_up = [0,0,0,0,0].map((_element,index)=>index<=position?1:0);
+    return follow_up.map((element,index)=>
+      <FontAwesomeIcon key={index} icon={faStar} className={element==1?'text-yellow-500':'text-amber-200'} size='2x'/>
+    );
+  }
 
   const starsController = (position:number)=>{
     const follow_up = [0,0,0,0,0].map((_element,index)=>index<=position?1:0);
@@ -54,6 +64,22 @@ export default function Home() {
   }
 
   const getFirstName = (fullName:string) => fullName.split(' ')[0];
+
+  const postRating = async(id:number, rating:number)=>{
+    if(rating == 0){
+      alert("mark a valid rating");
+      return;
+    }
+    const body = await JSON.stringify({id:id,rating:rating})
+    const res = await fetchWithAuth("http://127.0.0.1:8000/api/ratings/rate/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },body:body})
+
+    console.log(res)
+    alert(`Rating "${rating}" posted!`)
+  }
   
   
   return (
@@ -83,9 +109,9 @@ export default function Home() {
             <div key={index} className="w-[calc((100%-120px)/4)] flex flex-col justify-center shrink-0" onClick={() => { setFindex(index) }}>
               <p className="ml-1 font-bold mb-1.5">{value.category}</p>
               <figure className="relative w-full h-[70%] flex items-end rounded-xl overflow-hidden">
-                <img className="absolute w-full h-full object-cover " src="./template.jpeg" alt="" />
+                <img className="absolute w-full h-full object-cover " src={value.image} alt="" />
                 <div className="w-full z-50 bg-linear-to-b from-[rgba(0,0,0,0)] to-[rgba(0,0,0,6)]">
-                  <h3 className="m-2 font-bold  text-white">{value.name}</h3>
+                  <h3 className="m-2 font-bold  text-white">{value.title}</h3>
                 </div>
               </figure>
 
@@ -95,9 +121,9 @@ export default function Home() {
         <article className="mt-6 w-[90%] h-[300px] flex justify-center">
           <section className="basis-full flex flex-col">
             <div className="w-[90%] self-center">
-              <h2 className="text-2xl font-bold">{foodPack[Findex].name}</h2>
+              <h2 className="text-2xl font-bold">{foodPack[Findex].title}</h2>
               <figure className="mt-1  w-full flex items-end grow">
-                <img className="w-full h-full object-cover" src="./template.jpeg" alt="" />
+                <img className="w-full h-full object-cover" src={foodPack[Findex].image} alt="" />
               </figure>
             </div>
           </section>
@@ -105,11 +131,7 @@ export default function Home() {
             <div>
               <h2 className="text-xl font-bold text-center">Possible rating</h2>
               <div className="flex justify-center">
-                <FontAwesomeIcon icon={faStar} className="text-yellow-500" size="2x" />
-                <FontAwesomeIcon icon={faStar} className="text-yellow-500" size="2x" />
-                <FontAwesomeIcon icon={faStar} className="text-yellow-500" size="2x" />
-                <FontAwesomeIcon icon={voidStar} className="text-black" size="2x" />
-                <FontAwesomeIcon icon={voidStar} className="text-black" size="2x" />
+                {staticStarsCont(foodPack[Findex].predicted_rating-1)}
               </div>
             </div>
             <div className="flex flex-col items-center">
@@ -117,7 +139,7 @@ export default function Home() {
               <div className="flex justify-center">
                 {starsController(temp_rating[1])}
               </div>
-              <button className="w-[140px] mt-10 p-1 rounded-xl bg-[#47914b] text-white font-bold">Rate!</button>
+              <button onClick={()=>{postRating(foodPack[Findex].id, temp_rating[1]+1)}} className="w-[140px] mt-10 p-1 rounded-xl bg-[#47914b] text-white font-bold">Rate!</button>
             </div>
           </section>
           <section className="basis-full flex flex-col ">
