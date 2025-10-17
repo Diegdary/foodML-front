@@ -25,7 +25,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="h-[100vh] w-full bg-[#eee] flex justify-center items-center">
+    <div className="h-[100vh] w-full bg-[#FFFFF0] flex justify-center items-center">
       <form onSubmit={handleSubmit} className="p-14 flex flex-col justify-around bg-white w-[625px] h-[640px] shadow rounded-xl">
         <h2 className="text-center font-sans font-bold text-3xl">Registration!</h2>
         <h3 className="text-center font-sans font-bold">Name:</h3>

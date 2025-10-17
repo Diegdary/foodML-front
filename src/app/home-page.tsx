@@ -20,8 +20,7 @@ export default function Home() {
     { name: "Taco", category: 'Spicy', ingredients: ["Taco", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat"
     , "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat"] },
     { name: "Fish", category: 'Fast food', ingredients: ["Salt", "Lots of lettuce", "Etc."] },
-    { name: "Lemon Soup", category: 'Soup', ingredients: ["Salt", "Watta", "Lemon"] },
-  { name: "Lemon Soup", category: 'Soup', ingredients: ["Salt", "Watta", "Lemon"] }]);
+    { name: "Lemon Soup", category: 'Soup', ingredients: ["Salt", "Watta", "Lemon"] }]);
 
   useEffect(()=>{
     const load = async ()=>{
@@ -58,10 +57,10 @@ export default function Home() {
   
   
   return (
-    <div>
-      <header className="h-14 w-full border border-black border-solid">
+    <div className="h-dvh w-full bg-[#FFFFF0]">
+      <header className="bg-[#fffaab] h-14 w-full ">
         <nav className="flex justify-between items-center h-full">
-          <a href="/" className="font-bold text-2xl ml-3">Recomendations</a>
+          <a href="/" className=" font-bold text-2xl ml-3">Recomendations</a>
           <div className="flex justify-around items-center w-[600px] h-full">
             <a href="/history" className="font-bold basis-full text-center">History</a>
             <a href="/foods" className="font-bold basis-full text-center">All foods</a>
@@ -74,18 +73,22 @@ export default function Home() {
           </div>
         </nav>
       </header>
-      <main className="flex flex-col items-center">
-        <h1 className="self-start mx-5 my-7 text-xl">Hello, {getFirstName(name)}. Are any of these of interest to you?</h1>
-        <article className="bg-amber-100 border border-black border-solid w-[90%] h-[335px] p-5 rounded-md flex gap-10 overflow-x-auto overflow-y-hidden" style={{scrollbarColor:"#8b8b8b #fef3c6"}}>
+      <main className="bg-[#FFFFF0] flex flex-col items-center">
+        <div className="w-[90%]">
+          <h1 className="ml-0 self-start mx-5 my-7 text-2xl">Hello, {getFirstName(name)}. Are any of these of interest to you?</h1>
+        </div>
+        
+        <article className="bg-amber-100  w-[90%] h-[335px] p-5 rounded-xl flex gap-10 overflow-x-auto overflow-y-hidden" style={{scrollbarColor:"#8b8b8b #fef3c6"}}>
           {foodPack.map((value, index) => (
             <div key={index} className="w-[calc((100%-120px)/4)] flex flex-col justify-center shrink-0" onClick={() => { setFindex(index) }}>
-              <figure className="relative border border-black border-solid w-full h-[70%] flex items-end rounded-md overflow-hidden">
+              <p className="ml-1 font-bold mb-1.5">{value.category}</p>
+              <figure className="relative w-full h-[70%] flex items-end rounded-xl overflow-hidden">
                 <img className="absolute w-full h-full object-cover " src="./template.jpeg" alt="" />
                 <div className="w-full z-50 bg-linear-to-b from-[rgba(0,0,0,0)] to-[rgba(0,0,0,6)]">
                   <h3 className="m-2 font-bold  text-white">{value.name}</h3>
                 </div>
               </figure>
-              <p className="ml-1">{value.category}</p>
+
             </div>
           ))}
         </article>
@@ -93,7 +96,7 @@ export default function Home() {
           <section className="basis-full flex flex-col">
             <div className="w-[90%] self-center">
               <h2 className="text-2xl font-bold">{foodPack[Findex].name}</h2>
-              <figure className="mt-1 border border-black border-solid w-full flex items-end grow">
+              <figure className="mt-1  w-full flex items-end grow">
                 <img className="w-full h-full object-cover" src="./template.jpeg" alt="" />
               </figure>
             </div>
@@ -114,7 +117,7 @@ export default function Home() {
               <div className="flex justify-center">
                 {starsController(temp_rating[1])}
               </div>
-              <button className="mt-10 p-1 border-2 border-solid rounded-xl border-black bg-green-700 text-white font-bold">send rating!</button>
+              <button className="w-[140px] mt-10 p-1 rounded-xl bg-[#47914b] text-white font-bold">Rate!</button>
             </div>
           </section>
           <section className="basis-full flex flex-col ">
