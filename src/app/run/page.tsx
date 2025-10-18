@@ -13,10 +13,21 @@ export default function Run(){
   const [waiting,setWaiting] = useState("");
 
   const runModel = async ()=>{
-    const makeSession = await fetchWithAuth("http://localhost:8000/api/recommendations/sessions/");
-    setWaiting("Waiting for the model's training...")
-    console.log(makeSession)
-    const model = await fetchWithAuth(`http://localhost:8000/api/recommendations/sessions/${makeSession.id}/generate/`);
+    const body = await JSON.stringify({})
+    const makeSession = await fetchWithAuth("http://localhost:8000/api/recommendations/sessions/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },body:body})
+      console.log(makeSession)
+      setWaiting("Waiting for the model's training...");
+      const model = await fetchWithAuth(`http://localhost:8000/api/recommendations/sessions/${makeSession.id}/generate/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },body:body})
+    
+    
     setWaiting("Done!")
   }
 
@@ -57,7 +68,7 @@ export default function Run(){
                 <div className="w-[90%] h-[100%] flex flex-col">
                   {last_rec.recommendations?
                   last_rec?.recommendations.map((value:any,index:any)=>
-                    <div className="h-1/5" id="previous">
+                    <div key={index} className="h-1/5" id="previous">
                       <p className="font-bold">{value.category}</p>
                       <figure className="relative w-full h-[70%] flex items-end rounded-xl overflow-hidden">
                       <img className="absolute w-full h-full object-cover " src={value.image} alt="" />
