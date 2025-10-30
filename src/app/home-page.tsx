@@ -16,11 +16,7 @@ export default function Home() {
   const [Findex, setFindex] = useState(0);
   const [temp_rating, setTempRt] = useState([0,-1]);//[old position, current position]
   const [foodPack, setPack] = useState([
-    {id:1, title: "Fishes", category: 'Salad', ingredients: ["Salt", "Lettuce", "Etc."], predicted_rating:2, image:"https://res.cloudinary.com/dqlrqzo1a/image/upload/v1760283792/Pizza_frgss0.jpg" },
-    {id:2, title: "Taco", category: 'Spicy', ingredients: ["Taco", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat"
-    , "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat", "Lettuce", "meat"], predicted_rating:2, image:"https://res.cloudinary.com/dqlrqzo1a/image/upload/v1760283792/Pizza_frgss0.jpg" },
-    {id:3, title: "Fish", category: 'Fast food', ingredients: ["Salt", "Lots of lettuce", "Etc."], predicted_rating:2, image:"https://res.cloudinary.com/dqlrqzo1a/image/upload/v1760283792/Pizza_frgss0.jpg" },
-    {id:4, title: "Lemon Soup", category: 'Soup', ingredients: ["Salt", "Watta", "Lemon"], predicted_rating:2, image:"https://res.cloudinary.com/dqlrqzo1a/image/upload/v1760283792/Pizza_frgss0.jpg" }]);
+    {id:1, title: "None", category: '...', ingredients: ["...", "...", "..."], predicted_rating:2, image:"https://res.cloudinary.com/dqlrqzo1a/image/upload/v1760283792/Pizza_frgss0.jpg" },]);
 
   useEffect(()=>{
     

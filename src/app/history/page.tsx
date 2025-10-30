@@ -61,7 +61,7 @@ export default function History() {//get info
         <main className="flex flex-col items-center">
           <h2 className="mx-5 my-5 text-left text-xl font-bold">Previous recomendations:</h2>
           <article className="bg-amber-100 w-[90%] h-[330px] p-5 rounded-xl flex gap-10 overflow-x-auto overflow-y-hidden" style={{scrollbarColor:"#8b8b8b #fef3c6"}}>
-          {foodPacks.map((value,index)=>
+          {foodPacks.length == 0 ? <p className="font-bold">You haven't gotten any recommendations yet.</p>:foodPacks.map((value,index)=>
           <div key={index} className="w-[calc((100%-120px)/4)] flex flex-col justify-center shrink-0">
             <figure className="bg-[#0002]  p-4.5  w-full h-[70%] flex flex-col justify-between items-start rounded-xl overflow-hidden">
                 <div>
@@ -81,7 +81,7 @@ export default function History() {//get info
           </article>
           <h2 className="mx-5 my-5 text-left text-xl font-bold">Your ratings:</h2>
           <article className="bg-amber-100 w-[90%] h-[330px] p-5 rounded-xl flex gap-10 overflow-x-auto overflow-y-hidden" style={{scrollbarColor:"#8b8b8b #fef3c6"}}>
-            {ratingsPack.map((value,index)=>
+            {ratingsPack.length == 0?<p className="font-bold">You haven't rated any food yet.</p>:ratingsPack.map((value,index)=>
             <div key={index} className="w-[calc((100%-120px)/4)] flex flex-col justify-center shrink-0">
               <figure className="z-10 relative w-full h-[70%] flex flex-col justify-between items-start rounded-xl overflow-hidden">
                 <img className="-z-10 absolute w-full h-full object-cover" src={`${value.imgUrl}`}/>
